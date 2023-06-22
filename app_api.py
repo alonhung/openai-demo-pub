@@ -3,7 +3,7 @@ import config
 import openai
 import aiapi
 import azureApi
-import func
+
 
 def page_not_found(e):
   return render_template('404.html'), 404
@@ -19,14 +19,17 @@ app.register_error_handler(404, page_not_found)
 def index():
     
     if request.method == 'POST':
-      prompt = request.form['prompt']
+      # prompt = request.form['prompt']
+      data = request.json
+      prompt = data['prompt']
 
       res = {}
-      res['answer'] = func.request_from_pribate_EC2(prompt)
+    #   res['answer'] = "this is api result"+prompt
+      res['answer'] = azureApi.generateChatResponse(prompt)
       return jsonify(res), 200
         
-    return render_template('index.html', **locals())
+    return res
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='8080', debug=True)
+    app.run(host='0.0.0.0', port='8888', debug=True)
